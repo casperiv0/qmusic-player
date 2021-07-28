@@ -14,7 +14,11 @@ interface Props {
 
 export const NowPlaying = ({ setVolume, channel, upNext, track }: Props) => {
   if (!track || !channel) {
-    return <p className={styles.nowPlaying}>Nothing is playing right now!</p>;
+    return (
+      <p style={{ margin: "2rem 0" }} className={styles.nowPlaying}>
+        Nothing is playing right now!
+      </p>
+    );
   }
 
   const npThumbnail = track.thumbnail

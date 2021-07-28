@@ -5,6 +5,7 @@ import { ChannelsGrid } from "../components/ChannelsGrid";
 import { Loader } from "../components/Loader";
 import { NowPlaying } from "../components/NowPlaying";
 import { useMusic } from "../lib/useMusic";
+import { Footer } from "../components/Footer/Footer";
 
 const PlayerPage = () => {
   const { upNext, currentChannel, nowPlaying, channels, state, playNewChannel, setVolume } =
@@ -32,6 +33,8 @@ const PlayerPage = () => {
           <ChannelItem key={channel.id} channel={channel} playNewChannel={playNewChannel} />
         ))}
       </ChannelsGrid>
+
+      <Footer />
     </div>
   );
 };
