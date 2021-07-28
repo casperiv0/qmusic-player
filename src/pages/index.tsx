@@ -16,7 +16,7 @@ const PlayerPage = () => {
   }
 
   return (
-    <div>
+    <>
       <Head>
         <title>Q-Music Player</title>
       </Head>
@@ -35,7 +35,7 @@ const PlayerPage = () => {
       </ChannelsGrid>
 
       <Footer />
-    </div>
+    </>
   );
 };
 

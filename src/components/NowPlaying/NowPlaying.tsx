@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Head from "next/head";
 import styles from "./np.module.scss";
 import { VolumeSlider } from "../VolumeSlider";
 import { Track } from "../../types/Track";
@@ -31,6 +32,13 @@ export const NowPlaying = ({ setVolume, channel, upNext, track }: Props) => {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <link rel="shortcut icon" href={npThumbnail} type="image/x-icon" />
+        <title>
+          Playing {track.title} - {channel.data.name}
+        </title>
+      </Head>
+
       <div className={styles.nowPlaying}>
         <h1>Now playing</h1>
 
