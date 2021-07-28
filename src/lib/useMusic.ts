@@ -27,25 +27,30 @@ export function useMusic() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * refetch now playing every 7 seconds.
+   */
   React.useEffect(() => {
+    if (!currentChannel) return;
+
     const interval = setInterval(() => {
       fetchNowPlaying();
     }, 7_000);
 
     return () => clearInterval(interval);
-  }, [fetchNowPlaying]);
+  }, [currentChannel, fetchNowPlaying]);
 
   async function init() {
     setState("loading");
 
     createElement();
-    await fetchUrl();
+    await fetchChannelsData();
     await fetchNowPlaying();
 
     setState("idle");
   }
 
-  async function fetchUrl() {
+  async function fetchChannelsData() {
     try {
       const { data } = await axios.get(API_URL);
 
