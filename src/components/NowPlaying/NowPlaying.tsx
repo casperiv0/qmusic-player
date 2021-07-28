@@ -11,15 +11,20 @@ interface Props {
 }
 
 export const NowPlaying = ({ setVolume, channel, track }: Props) => {
-  if (!track) {
-    return <p>Nothing is playing rn</p>;
+  if (!track || !channel) {
+    return <p className={styles.nowPlaying}>Nothing is playing right now!</p>;
   }
+
+  const thumbnailUrl = track.thumbnail
+    ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${track.thumbnail}`
+    : channel?.data.logo.app_square;
 
   return (
     <div className={styles.nowPlaying}>
       <header className={styles.header}>
         <Image
-          src={`https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${track.thumbnail}`}
+          objectFit="cover"
+          src={thumbnailUrl}
           alt={track.title}
           draggable={false}
           height="80px"

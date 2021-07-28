@@ -1,14 +1,15 @@
 import * as React from "react";
 import { ChannelItem } from "../components/ChannelItem";
 import { ChannelsGrid } from "../components/ChannelsGrid";
+import { Loader } from "../components/Loader";
 import { NowPlaying } from "../components/NowPlaying";
 import { useMusic } from "../lib/useMusic";
 
-const Page = () => {
+const PlayerPage = () => {
   const { currentChannel, nowPlaying, channels, state, playNewChannel, setVolume } = useMusic();
 
   if (state === "loading") {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   return (
@@ -24,4 +25,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default PlayerPage;

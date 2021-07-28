@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Channel } from "../../types/Channel";
 import styles from "./channel.module.scss";
+import { PlayIcon } from "./PlayIcon";
 
 interface Props {
   channel: Channel;
@@ -9,8 +10,14 @@ interface Props {
 
 export const ChannelItem = ({ channel, playNewChannel }: Props) => {
   return (
-    <div onClick={() => playNewChannel(channel)} className={styles.channelItem}>
-      <p>{channel.data.name}</p>
+    <div
+      title="Click to play channel"
+      onClick={() => playNewChannel(channel)}
+      className={styles.channelItem}
+    >
+      <div className={styles.playIcon}>
+        <PlayIcon />
+      </div>
 
       <Image
         src={channel.data.logo.app_square}
@@ -19,6 +26,8 @@ export const ChannelItem = ({ channel, playNewChannel }: Props) => {
         width="160px"
         draggable={false}
       />
+
+      <p>{channel.data.name}</p>
     </div>
   );
 };
