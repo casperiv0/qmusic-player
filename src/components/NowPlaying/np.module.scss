@@ -1,7 +1,27 @@
-.nowPlaying {
+.container {
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+    gap: 3rem;
+  }
+}
+
+.nowPlaying {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  > h1 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  img {
+    border-radius: 0.5rem;
+  }
 }
 
 .header {
@@ -24,7 +44,7 @@
     font-weight: 500;
   }
 
-  & input {
+  input {
     margin-top: 0.9rem;
   }
 }
