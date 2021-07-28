@@ -1,7 +1,7 @@
 export interface Channel {
   id: number;
   type: string;
-
+  color: ChannelColor;
   data: ChannelData;
 }
 
@@ -10,6 +10,8 @@ export interface ChannelData {
   background_image: string;
   name: string;
   streams: Record<IChannelStreams, ChannelStream[]>;
+  logo: ChannelLogo;
+  api_url: string;
 }
 
 export type IChannelStreams =
@@ -25,4 +27,16 @@ export type IChannelStreams =
 export interface ChannelStream {
   source: string;
   extra: unknown | null;
+}
+
+export interface ChannelLogo {
+  app_card: string;
+  app_square: string;
+  active_iphone_url: string;
+}
+
+export interface ChannelColor {
+  background: string;
+  extra: string;
+  foreground: string;
 }

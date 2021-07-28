@@ -1,11 +1,27 @@
 import * as React from "react";
-import { MusicManager } from "../lib/MusicManager";
+import { ChannelItem } from "../components/ChannelItem";
+import { ChannelsGrid } from "../components/ChannelsGrid";
+import { NowPlaying } from "../components/NowPlaying";
+import { useMusic } from "../lib/useMusic";
 
 const Page = () => {
-  const manager = React.useMemo(() => typeof window !== "undefined" && new MusicManager(), []);
-  console.log(manager);
+  const { currentChannel, nowPlaying, channels, state, playNewChannel, setVolume } = useMusic();
 
-  return <div>Hello World</div>;
+  if (state === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  return (
+    <div>
+      <NowPlaying channel={currentChannel} setVolume={setVolume} track={nowPlaying} />
+
+      <ChannelsGrid>
+        {channels.map((channel) => (
+          <ChannelItem key={channel.id} channel={channel} playNewChannel={playNewChannel} />
+        ))}
+      </ChannelsGrid>
+    </div>
+  );
 };
 
 export default Page;
