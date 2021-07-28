@@ -17,14 +17,14 @@ const PlayerPage = () => {
   return (
     <div>
       <Head>
-        <title>QMusic Player</title>
+        <title>Q-Music Player</title>
       </Head>
 
       <NowPlaying
         upNext={upNext}
         channel={currentChannel}
-        setVolume={setVolume}
         track={nowPlaying}
+        setVolume={setVolume}
       />
 
       <ChannelsGrid>

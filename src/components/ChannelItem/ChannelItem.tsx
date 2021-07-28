@@ -22,7 +22,7 @@ export const ChannelItem = ({ channel, playNewChannel }: Props) => {
       <Image
         src={channel.data.logo.app_square}
         alt={channel.data.name}
-        height="140px"
+        height="160px"
         width="160px"
         draggable={false}
       />

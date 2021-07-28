@@ -32,10 +32,10 @@ export const NowPlaying = ({ setVolume, channel, upNext, track }: Props) => {
 
         <header className={styles.header}>
           <Image
-            objectFit="cover"
             src={npThumbnail}
             alt={track.title}
             draggable={false}
+            objectFit="cover"
             height="85px"
             width="85px"
           />
@@ -55,10 +55,10 @@ export const NowPlaying = ({ setVolume, channel, upNext, track }: Props) => {
 
           <header className={styles.header}>
             <Image
-              objectFit="cover"
               src={upNextThumbnail}
               alt={upNext.title}
               draggable={false}
+              objectFit="cover"
               height="80px"
               width="80px"
             />
