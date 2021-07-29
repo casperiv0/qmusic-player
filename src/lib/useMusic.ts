@@ -108,6 +108,8 @@ export function useMusic() {
 
     if (track.next) {
       setNext(track.next);
+    } else {
+      setNext(null);
     }
   }
 
