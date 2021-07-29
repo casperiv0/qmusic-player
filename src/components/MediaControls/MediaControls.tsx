@@ -1,3 +1,4 @@
+import * as React from "react";
 import { PlayFillIcon } from "../../icons/PlayFill";
 import { SkipBackwardIcon } from "../../icons/SkipBackward";
 import { SkipForwardIcon } from "../../icons/SkipForward";
@@ -26,6 +27,22 @@ export const MediaControls = ({
   playNewChannel,
   setVolume,
 }: Props) => {
+  React.useEffect(() => {
+    if (!("mediaSession" in navigator)) return;
+
+    (navigator as any).mediaSession.setActionHandler("previoustrack", () => {
+      handlePrevChannel();
+    });
+
+    (navigator as any).mediaSession.setActionHandler("nexttrack", () => {
+      handleNextChannel();
+    });
+
+    (navigator as any).mediaSession.setActionHandler("play", () => {
+      handlePlayPause();
+    });
+  });
+
   function handleNextChannel() {
     if (!channel) return; // nothing is playing.
 
