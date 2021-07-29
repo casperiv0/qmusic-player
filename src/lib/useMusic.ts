@@ -16,6 +16,7 @@ export function useMusic() {
   const _element = React.useRef<HTMLAudioElement>(null);
 
   const [state, setState] = React.useState<States>("idle");
+  const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
 
   const [currentChannel, setCurrentChannel] = React.useState<Channel | null>(null);
 
@@ -130,11 +131,18 @@ export function useMusic() {
       return console.error("There was no element");
     }
 
+    setIsPlaying(true);
     _element.current.src = `${stream.source}?cb=${(Math.random() * 2000).toFixed(0)}`;
   }
 
   function play() {
+    setIsPlaying(true);
     return _element.current?.play().catch(() => null);
+  }
+
+  function pause() {
+    setIsPlaying(false);
+    return _element.current?.pause();
   }
 
   function playNewChannel(channel: Channel) {
@@ -168,5 +176,16 @@ export function useMusic() {
     _element.current.volume = volume;
   }
 
-  return { upNext, currentChannel, nowPlaying, state, channels, play, playNewChannel, setVolume };
+  return {
+    isPlaying,
+    upNext,
+    currentChannel,
+    nowPlaying,
+    state,
+    channels,
+    pause,
+    play,
+    playNewChannel,
+    setVolume,
+  };
 }

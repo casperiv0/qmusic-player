@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Head from "next/head";
 import styles from "./np.module.scss";
-import { VolumeSlider } from "../VolumeSlider";
 import { Track } from "../../types/Track";
 import { Channel } from "../../types/Channel";
 
@@ -9,11 +8,10 @@ interface Props {
   channel: Channel | null;
   track: Track | null;
   upNext: Track | null;
-
-  setVolume: (vol: number) => void;
+  isPlaying: boolean;
 }
 
-export const NowPlaying = ({ setVolume, channel, upNext, track }: Props) => {
+export const NowPlaying = ({ isPlaying, channel, upNext, track }: Props) => {
   if (!track || !channel) {
     return (
       <p style={{ margin: "2rem 0" }} className={styles.nowPlaying}>
@@ -35,7 +33,7 @@ export const NowPlaying = ({ setVolume, channel, upNext, track }: Props) => {
       <Head>
         <link rel="shortcut icon" href={npThumbnail} type="image/x-icon" />
         <title>
-          Playing {track.title} - {channel.data.name}
+          {isPlaying ? "Playing" : "Paused. "} {track.title} - {channel.data.name}
         </title>
       </Head>
 
@@ -56,7 +54,6 @@ export const NowPlaying = ({ setVolume, channel, upNext, track }: Props) => {
             <h1>{track.title}</h1>
             <h4>{track.artist.name}</h4>
             <h4>{channel?.data.name}</h4>
-            <VolumeSlider channel={channel} setVolume={setVolume} />
           </div>
         </header>
       </div>

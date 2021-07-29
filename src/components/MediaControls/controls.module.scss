@@ -1,0 +1,35 @@
+.mediaControls {
+  margin-top: 1rem;
+  display: flex;
+
+  align-items: center;
+
+  input {
+    margin-left: 1rem;
+  }
+}
+
+.mediaControlBtn {
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  svg {
+    fill: #ffffff;
+    height: 2rem;
+    width: 2rem;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &:hover:enabled {
+    filter: brightness(90%);
+  }
+
+  &:focus:enabled {
+    outline: 2px solid var(--blue);
+  }
+}

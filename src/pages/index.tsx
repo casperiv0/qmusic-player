@@ -6,12 +6,12 @@ import { Loader } from "../components/Loader";
 import { NowPlaying } from "../components/NowPlaying";
 import { useMusic } from "../lib/useMusic";
 import { Footer } from "../components/Footer/Footer";
+import { MediaControls } from "../components/MediaControls";
 
 const PlayerPage = () => {
-  const { upNext, currentChannel, nowPlaying, channels, state, playNewChannel, setVolume } =
-    useMusic();
+  const music = useMusic();
 
-  if (state === "loading") {
+  if (music.state === "loading") {
     return <Loader />;
   }
 
@@ -21,16 +21,26 @@ const PlayerPage = () => {
         <title>Q-Music Player</title>
       </Head>
 
+      <MediaControls
+        channel={music.currentChannel}
+        channels={music.channels}
+        isPlaying={music.isPlaying}
+        playNewChannel={music.playNewChannel}
+        pause={music.pause}
+        play={music.play}
+        setVolume={music.setVolume}
+      />
+
       <NowPlaying
-        upNext={upNext}
-        channel={currentChannel}
-        track={nowPlaying}
-        setVolume={setVolume}
+        isPlaying={music.isPlaying}
+        upNext={music.upNext}
+        channel={music.currentChannel}
+        track={music.nowPlaying}
       />
 
       <ChannelsGrid>
-        {channels.map((channel) => (
-          <ChannelItem key={channel.id} channel={channel} playNewChannel={playNewChannel} />
+        {music.channels.map((channel) => (
+          <ChannelItem key={channel.id} channel={channel} playNewChannel={music.playNewChannel} />
         ))}
       </ChannelsGrid>
 

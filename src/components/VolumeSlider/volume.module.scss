@@ -26,4 +26,17 @@
     border: none;
     border-radius: 50%;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &::-webkit-slider-thumb {
+      cursor: not-allowed;
+    }
+
+    &::-moz-range-thumb {
+      cursor: not-allowed;
+    }
+  }
 }

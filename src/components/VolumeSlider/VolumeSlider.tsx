@@ -30,7 +30,14 @@ export const VolumeSlider = ({ channel, setVolume }: Props) => {
           }
         `}
       </style>
-      <input type="range" value={vol} onChange={onChange} className={styles.volumeSlider} />
+      <input
+        disabled={!channel}
+        title={`Volume: ${vol}%`}
+        type="range"
+        value={vol}
+        onChange={onChange}
+        className={styles.volumeSlider}
+      />
     </>
   );
 };
