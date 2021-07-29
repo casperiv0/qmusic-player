@@ -20,16 +20,18 @@ export const VolumeSlider = ({ channel, setVolume }: Props) => {
 
   return (
     <>
-      <style jsx>
-        {`
-          ::-webkit-slider-thumb {
-            background: ${channel?.color.background} !important;
-          }
-          ::-moz-range-thumb {
-            background: ${channel?.color.background} !important;
-          }
-        `}
-      </style>
+      {channel?.color ? (
+        <style jsx>
+          {`
+            ::-webkit-slider-thumb {
+              background: ${channel?.color?.background} !important;
+            }
+            ::-moz-range-thumb {
+              background: ${channel?.color?.background} !important;
+            }
+          `}
+        </style>
+      ) : null}
       <input
         disabled={!channel}
         title={`Volume: ${vol}%`}
