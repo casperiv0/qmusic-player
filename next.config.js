@@ -1,5 +1,5 @@
 /**
- * @type {import("next/dist/next-server/server/config-shared").NextConfig}
+ * @type {import("next/dist/server/config-shared").NextConfig}
  */
 module.exports = {
   images: {
@@ -19,5 +19,6 @@ module.exports = {
   },
   experimental: {
     turboMode: true,
+    esmExternals: true,
   },
 };
