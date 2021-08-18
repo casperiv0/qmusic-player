@@ -85,11 +85,11 @@ export const MediaControls = ({
       <button
         disabled={!channel}
         onClick={handlePlayPause}
-        title="Pause/Resume music"
-        aria-label=""
+        title="Pause/Resume channel"
+        aria-label="Pause or resume the channel"
         className={styles.mediaControlBtn}
       >
-        {isPlaying ? <PlayFillIcon /> : <PauseIcon />}
+        {isPlaying ? <PauseIcon /> : <PlayFillIcon />}
       </button>
       <button
         disabled={!channel}
