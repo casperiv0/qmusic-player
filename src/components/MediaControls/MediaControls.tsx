@@ -6,27 +6,22 @@ import { PauseIcon } from "../../icons/PauseIcon";
 import { Channel } from "../../types/Channel";
 import styles from "./controls.module.scss";
 import { VolumeSlider } from "../VolumeSlider";
+import { useStore } from "lib/store";
 
 interface Props {
-  channels: Channel[];
-  channel: Channel | null;
-  isPlaying: boolean;
-
   pause: () => void;
   play: () => void;
   playNewChannel: (channel: Channel) => void;
   setVolume: (vol: number) => void;
 }
 
-export const MediaControls = ({
-  isPlaying,
-  channel,
-  channels,
-  play,
-  pause,
-  playNewChannel,
-  setVolume,
-}: Props) => {
+export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props) => {
+  const [isPlaying, channel, channels] = useStore((s) => [
+    s.isPlaying,
+    s.currentChannel,
+    s.channels,
+  ]);
+
   React.useEffect(() => {
     if (!("mediaSession" in navigator)) return;
 

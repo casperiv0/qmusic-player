@@ -1,18 +1,17 @@
 import Image from "next/image";
 import Head from "next/head";
 import styles from "./np.module.scss";
-import { Track } from "../../types/Track";
-import { Channel } from "../../types/Channel";
+import { useStore } from "lib/store";
 
-interface Props {
-  channel: Channel | null;
-  track: Track | null;
-  upNext: Track | null;
-  isPlaying: boolean;
-}
+export const NowPlaying = () => {
+  const [isPlaying, nowPlaying, upNext, currentChannel] = useStore((s) => [
+    s.isPlaying,
+    s.nowPlaying,
+    s.upNext,
+    s.currentChannel,
+  ]);
 
-export const NowPlaying = ({ isPlaying, channel, upNext, track }: Props) => {
-  if (!track || !channel) {
+  if (!nowPlaying || !currentChannel) {
     return (
       <p style={{ margin: "2rem 0" }} className={styles.nowPlaying}>
         Nothing is playing right now!
@@ -20,20 +19,20 @@ export const NowPlaying = ({ isPlaying, channel, upNext, track }: Props) => {
     );
   }
 
-  const npThumbnail = track.thumbnail
-    ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${track.thumbnail}`
-    : channel?.data.logo.app_square;
+  const npThumbnail = nowPlaying.thumbnail
+    ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${nowPlaying.thumbnail}`
+    : currentChannel.data.logo.app_square;
 
   const upNextThumbnail = upNext?.thumbnail
     ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${upNext.thumbnail}`
-    : channel?.data.logo.app_square;
+    : currentChannel.data.logo.app_square;
 
   return (
     <div className={styles.container}>
       <Head>
         <link rel="shortcut icon" href={npThumbnail} type="image/x-icon" />
         <title>
-          {isPlaying ? "Playing" : "Paused. "} {track.title} - {channel.data.name}
+          {isPlaying ? "Playing" : "Paused. "} {nowPlaying.title} - {currentChannel.data.name}
         </title>
       </Head>
 
@@ -43,7 +42,7 @@ export const NowPlaying = ({ isPlaying, channel, upNext, track }: Props) => {
         <header className={styles.header}>
           <Image
             src={npThumbnail}
-            alt={track.title}
+            alt={nowPlaying.title}
             draggable={false}
             objectFit="cover"
             height="85px"
@@ -51,9 +50,9 @@ export const NowPlaying = ({ isPlaying, channel, upNext, track }: Props) => {
           />
 
           <div className={styles.titleArea}>
-            <h1>{track.title}</h1>
-            <h4>{track.artist.name}</h4>
-            <h4>{channel?.data.name}</h4>
+            <h1>{nowPlaying.title}</h1>
+            <h4>{nowPlaying.artist.name}</h4>
+            <h4>{currentChannel.data.name}</h4>
           </div>
         </header>
       </div>
@@ -75,7 +74,7 @@ export const NowPlaying = ({ isPlaying, channel, upNext, track }: Props) => {
             <div className={styles.titleArea}>
               <h1>{upNext.title}</h1>
               <h4>{upNext.artist.name}</h4>
-              <h4>{channel?.data.name}</h4>
+              <h4>{currentChannel.data.name}</h4>
             </div>
           </header>
         </div>

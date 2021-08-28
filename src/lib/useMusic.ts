@@ -1,10 +1,9 @@
 import * as React from "react";
 import axios from "axios";
 import { Channel, ChannelStream } from "../types/Channel";
-import { Track } from "../types/Track";
 import { useRouter } from "next/dist/client/router";
+import { useStore } from "./store";
 
-type States = "idle" | "loading" | "error";
 const API_URL = "https://api.qmusic.be/2.4/app/channels";
 
 function makeNowPlayingUrl(apiUrl: string) {
@@ -15,28 +14,18 @@ export function useMusic() {
   const router = useRouter();
   const _element = React.useRef<HTMLAudioElement>(null);
 
-  const [state, setState] = React.useState<States>("idle");
-  const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
-
-  const [currentChannel, setCurrentChannel] = React.useState<Channel | null>(null);
-
-  const [nowPlaying, setNowPlaying] = React.useState<Track | null>(null);
-  const [nowPlayingUrl, setNowPlayingUrl] = React.useState<string | null>(null);
-
-  const [upNext, setNext] = React.useState<Track | null>(null);
-
-  const [channels, setChannels] = React.useState<Channel[]>([]);
+  const store = useStore();
 
   const parseParams = React.useCallback(() => {
-    if (router.query.channel && state === "idle") {
-      const channel = channels.find((v) => v.data.id === router.query.channel);
+    if (router.query.channel && store.state === "idle") {
+      const channel = store.channels.find((v) => v.data.id === router.query.channel);
 
       if (channel) {
         playNewChannel(channel);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, channels, router.query.channel]);
+  }, [store.state, store.channels, router.query.channel]);
 
   React.useEffect(() => {
     parseParams();
@@ -51,23 +40,23 @@ export function useMusic() {
    * refetch now playing every 7 seconds.
    */
   React.useEffect(() => {
-    if (!currentChannel) return;
+    if (!store.currentChannel) return;
 
     const interval = setInterval(() => {
       fetchNowPlaying();
     }, 7_000);
 
     return () => clearInterval(interval);
-  }, [currentChannel, fetchNowPlaying]);
+  }, [store.currentChannel, fetchNowPlaying]);
 
   async function init() {
-    setState("loading");
+    store.setState("loading");
 
     createElement();
     await fetchChannelsData();
     await fetchNowPlaying();
 
-    setState("idle");
+    store.setState("idle");
   }
 
   async function fetchChannelsData() {
@@ -75,42 +64,55 @@ export function useMusic() {
       const { data } = await axios.get(API_URL);
 
       const channels = data.data as Channel[];
-      setChannels(channels);
+      store.setChannels(channels);
 
       const [channel] = channels;
       if (!data || !channel) {
         throw new Error("No data received");
       }
 
-      setNowPlayingUrl(makeNowPlayingUrl(channel.data.api_url));
+      store.setNowPlayingUrl(makeNowPlayingUrl(channel.data.api_url));
 
       const [stream] = channel.data.streams.mp3;
 
       setStreamToEl(stream!);
     } catch (e) {
+      store.setNowPlaying(null);
+      store.setCurrentChannel(null);
+
+      store.setState("error");
       console.error(e);
     }
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function fetchNowPlaying(url = nowPlayingUrl) {
-    if (!url) return;
+  async function fetchNowPlaying(url = store.nowPlayingUrl) {
+    try {
+      if (!url) return;
 
-    const { data } = await axios.get(url, {
-      params: {
-        limit: 1,
-        next: true,
-      },
-    });
+      const { data } = await axios.get(url, {
+        params: {
+          limit: 1,
+          next: true,
+        },
+      });
 
-    const [track] = data.played_tracks;
+      const [track] = data.played_tracks;
 
-    setNowPlaying(track);
+      store.setNowPlaying(track);
 
-    if (track.next) {
-      setNext(track.next);
-    } else {
-      setNext(null);
+      if (track.next) {
+        store.setUpNext(track.next);
+      } else {
+        store.setUpNext(null);
+      }
+
+      store.setState("idle");
+    } catch (err) {
+      store.setNowPlaying(null);
+      store.setCurrentChannel(null);
+
+      store.setState("error");
     }
   }
 
@@ -131,17 +133,17 @@ export function useMusic() {
       return console.error("There was no element");
     }
 
-    setIsPlaying(true);
+    store.setIsPlaying(true);
     _element.current.src = `${stream.source}?cb=${(Math.random() * 2000).toFixed(0)}`;
   }
 
   function play() {
-    setIsPlaying(true);
+    store.setIsPlaying(true);
     return _element.current?.play().catch(() => null);
   }
 
   function pause() {
-    setIsPlaying(false);
+    store.setIsPlaying(false);
     return _element.current?.pause();
   }
 
@@ -149,10 +151,10 @@ export function useMusic() {
     const [stream] = channel.data.streams.mp3;
 
     const url = makeNowPlayingUrl(channel.data.api_url);
-    setNowPlayingUrl(url);
+    store.setNowPlayingUrl(url);
     fetchNowPlaying(url);
 
-    setCurrentChannel(channel);
+    store.setCurrentChannel(channel);
     setStreamToEl(stream!);
 
     router.replace({
@@ -177,12 +179,6 @@ export function useMusic() {
   }
 
   return {
-    isPlaying,
-    upNext,
-    currentChannel,
-    nowPlaying,
-    state,
-    channels,
     pause,
     play,
     playNewChannel,

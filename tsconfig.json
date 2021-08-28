@@ -27,7 +27,14 @@
     "noUnusedParameters": true /* Report errors on unused parameters. */,
     "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
     "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
-    "noUncheckedIndexedAccess": true /* Include 'undefined' in index signature results */
+    "noUncheckedIndexedAccess": true /* Include 'undefined' in index signature results */,
+    "baseUrl": ".",
+    "paths": {
+      "lib/*": ["./src/lib/*"],
+      "types/*": ["./src/types/*"],
+      "components/*": ["./src/components/*"],
+      "icons/*": ["./src/icons/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
