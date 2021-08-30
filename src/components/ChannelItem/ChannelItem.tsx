@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Channel } from "../../types/Channel";
+import { Channel } from "types/Channel";
 import styles from "./channel.module.scss";
 import { PlayIcon } from "./PlayIcon";
 

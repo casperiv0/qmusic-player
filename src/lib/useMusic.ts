@@ -137,9 +137,17 @@ export function useMusic() {
     _element.current.src = `${stream.source}?cb=${(Math.random() * 2000).toFixed(0)}`;
   }
 
-  function play() {
+  async function play() {
+    if (!_element.current) return false;
+
     store.setIsPlaying(true);
-    return _element.current?.play().catch(() => null);
+
+    try {
+      await _element.current.play();
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   function pause() {
@@ -147,14 +155,12 @@ export function useMusic() {
     return _element.current?.pause();
   }
 
-  function playNewChannel(channel: Channel) {
+  async function playNewChannel(channel: Channel) {
     const [stream] = channel.data.streams.mp3;
 
     const url = makeNowPlayingUrl(channel.data.api_url);
     store.setNowPlayingUrl(url);
-    fetchNowPlaying(url);
 
-    store.setCurrentChannel(channel);
     setStreamToEl(stream!);
 
     router.replace({
@@ -163,7 +169,12 @@ export function useMusic() {
       },
     });
 
-    play();
+    const success = await play();
+
+    if (success) {
+      fetchNowPlaying(url);
+      store.setCurrentChannel(channel);
+    }
   }
 
   function setVolume(volume: number) {
