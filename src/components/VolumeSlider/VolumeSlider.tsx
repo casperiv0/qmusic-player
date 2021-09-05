@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Channel } from "../../types/Channel";
+import { getLocalVolume, setLocalVolume } from "lib/volume";
+import { Channel } from "types/Channel";
 import styles from "./volume.module.scss";
 
 interface Props {
@@ -8,13 +9,20 @@ interface Props {
 }
 
 export const VolumeSlider = ({ channel, setVolume }: Props) => {
-  const [vol, setVol] = React.useState(30);
+  const [vol, setVol] = React.useState(0);
+
+  React.useEffect(() => {
+    const vol = getLocalVolume();
+    setVol(vol);
+    setVolume(vol / 100);
+  }, [setVolume]);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.currentTarget.valueAsNumber;
     const newVol = value / 100;
 
     setVol(value);
+    setLocalVolume(value);
     setVolume(newVol);
   }
 
