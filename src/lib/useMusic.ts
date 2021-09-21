@@ -90,14 +90,21 @@ export function useMusic() {
     try {
       if (!url) return;
 
-      const { data } = await axios.get(url, {
-        params: {
-          limit: 1,
-          next: true,
-        },
-      });
+      const { data } = await axios
+        .get(url, {
+          params: {
+            limit: 1,
+            next: true,
+          },
+        })
+        .catch(() => ({ data: null }));
 
-      const [track] = data.played_tracks;
+      const [track] = data?.played_tracks ?? [];
+
+      if (!track) {
+        store.setState("idle");
+        return;
+      }
 
       store.setNowPlaying(track);
 
