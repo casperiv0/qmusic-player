@@ -61,7 +61,7 @@ export function useMusic() {
 
   async function fetchChannelsData() {
     try {
-      const { data } = await axios.get(API_URL);
+      const { data } = await axios.get<any>(API_URL);
 
       const channels = data.data as Channel[];
       store.setChannels(channels);
@@ -91,7 +91,7 @@ export function useMusic() {
       if (!url) return;
 
       const { data } = await axios
-        .get(url, {
+        .get<any>(url, {
           params: {
             limit: 1,
             next: true,
