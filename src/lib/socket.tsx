@@ -68,6 +68,8 @@ export const SocketProvider = () => {
       const preData = JSON.parse(message.data);
       const data = JSON.parse(preData?.data ?? "{}");
 
+      if (data.station !== currentChannel?.data.station_id) return;
+
       if (data.entity === "program") {
         setCurrentProgram(null);
 
