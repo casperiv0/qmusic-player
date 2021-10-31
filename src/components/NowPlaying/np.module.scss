@@ -48,3 +48,20 @@
     margin-top: 0.9rem;
   }
 }
+
+.program {
+  margin-top: 2rem;
+}
+
+.presenters {
+  margin-top: 1rem;
+
+  > h1 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  ul {
+    list-style: none;
+  }
+}

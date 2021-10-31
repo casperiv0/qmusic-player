@@ -4,14 +4,22 @@ import { ChannelItem } from "components/ChannelItem";
 import { ChannelsGrid } from "components/ChannelsGrid";
 import { Loader } from "components/Loader";
 import { NowPlaying } from "components/NowPlaying";
-import { useMusic } from "lib/useMusic";
+import { fetchChannels, useMusic } from "lib/useMusic";
 import { Footer } from "components/Footer/Footer";
 import { MediaControls } from "components/MediaControls";
 import { useStore } from "lib/store";
 import { Error } from "components/Error/Error";
+import { SocketProvider } from "lib/socket";
+import { GetServerSideProps } from "next";
+import { Channel } from "types/Channel";
 
-const PlayerPage = () => {
-  const music = useMusic();
+export interface AppProps {
+  channels: Channel[];
+  channel: Channel | null;
+}
+
+export default function PlayerPage({ channels: data, channel }: AppProps) {
+  const music = useMusic({ channels: data, channel });
   const [state, channels] = useStore((s) => [s.state, s.channels]);
 
   if (state === "loading") {
@@ -40,8 +48,19 @@ const PlayerPage = () => {
         ))}
       </ChannelsGrid>
       <Footer />
+
+      <SocketProvider />
     </>
   );
-};
+}
 
-export default PlayerPage;
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { channels } = await fetchChannels();
+
+  return {
+    props: {
+      channels,
+      channel: channels.find((v) => v.data.station_id === String(query.channel)) ?? null,
+    },
+  };
+};

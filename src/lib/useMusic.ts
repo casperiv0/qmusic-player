@@ -3,6 +3,7 @@ import axios from "axios";
 import { Channel, ChannelStream } from "../types/Channel";
 import { useRouter } from "next/dist/client/router";
 import { useStore } from "./store";
+import { AppProps } from "src/pages";
 
 const API_URL = "https://api.qmusic.be/2.4/app/channels";
 
@@ -10,7 +11,7 @@ function makeNowPlayingUrl(apiUrl: string) {
   return `https://${apiUrl}/2.4/tracks/plays?limit=1&next=true`;
 }
 
-export function useMusic() {
+export function useMusic({ channels, channel }: AppProps) {
   const router = useRouter();
   const _element = React.useRef<HTMLAudioElement>(null);
 
@@ -36,38 +37,27 @@ export function useMusic() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /**
-   * refetch now playing every 7 seconds.
-   */
-  React.useEffect(() => {
-    if (!store.currentChannel) return;
-
-    const interval = setInterval(() => {
-      fetchNowPlaying();
-    }, 7_000);
-
-    return () => clearInterval(interval);
-  }, [store.currentChannel, fetchNowPlaying]);
-
   async function init() {
-    store.setState("loading");
+    if (channels) {
+      store.setChannels(channels);
+    } else {
+      await fetchChannelsData();
+    }
+
+    if (channel) {
+      store.setCurrentChannel(channel);
+    }
 
     createElement();
-    await fetchChannelsData();
-    await fetchNowPlaying();
-
-    store.setState("idle");
   }
 
   async function fetchChannelsData() {
     try {
-      const { data } = await axios.get<any>(API_URL);
-
-      const channels = data.data as Channel[];
+      const { channels } = await fetchChannels();
       store.setChannels(channels);
 
       const [channel] = channels;
-      if (!data || !channel) {
+      if (!channel) {
         throw new Error("No data received");
       }
 
@@ -82,44 +72,6 @@ export function useMusic() {
 
       store.setState("error");
       console.error(e);
-    }
-  }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function fetchNowPlaying(url = store.nowPlayingUrl) {
-    try {
-      if (!url) return;
-
-      const { data } = await axios
-        .get<any>(url, {
-          params: {
-            limit: 1,
-            next: true,
-          },
-        })
-        .catch(() => ({ data: null }));
-
-      const [track] = data?.played_tracks ?? [];
-
-      if (!track) {
-        store.setState("idle");
-        return;
-      }
-
-      store.setNowPlaying(track);
-
-      if (track.next) {
-        store.setUpNext(track.next);
-      } else {
-        store.setUpNext(null);
-      }
-
-      store.setState("idle");
-    } catch (err) {
-      store.setNowPlaying(null);
-      store.setCurrentChannel(null);
-
-      store.setState("error");
     }
   }
 
@@ -179,7 +131,6 @@ export function useMusic() {
     const success = await play();
 
     if (success) {
-      fetchNowPlaying(url);
       store.setCurrentChannel(channel);
     }
   }
@@ -202,4 +153,16 @@ export function useMusic() {
     playNewChannel,
     setVolume,
   };
+}
+
+export async function fetchChannels() {
+  try {
+    const { data } = await axios.get<any>(API_URL);
+
+    const channels = data.data as Channel[];
+
+    return { channels };
+  } catch (e) {
+    return { channels: [] };
+  }
 }

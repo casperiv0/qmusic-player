@@ -1,6 +1,7 @@
 import create from "zustand";
 import { Channel } from "types/Channel";
 import { Track } from "types/Track";
+import { Program } from "types/Program";
 
 export type PlayStates = "idle" | "loading" | "error";
 
@@ -25,6 +26,9 @@ interface Store {
 
   channels: Channel[];
   setChannels: (channels: Channel[]) => void;
+
+  currentProgram: Program | null;
+  setCurrentProgram: (program: Program | null) => void;
 }
 
 export const useStore = create<Store>((set) => ({
@@ -48,4 +52,7 @@ export const useStore = create<Store>((set) => ({
 
   channels: [],
   setChannels: (channels) => set({ channels }),
+
+  currentProgram: null,
+  setCurrentProgram: (program) => set({ currentProgram: program }),
 }));

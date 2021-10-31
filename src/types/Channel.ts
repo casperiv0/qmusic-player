@@ -12,6 +12,7 @@ export interface ChannelData {
   streams: Record<IChannelStreams, ChannelStream[]>;
   logo: ChannelLogo;
   api_url: string;
+  station_id: string;
 }
 
 export type IChannelStreams =
