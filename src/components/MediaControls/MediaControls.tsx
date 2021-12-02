@@ -8,6 +8,7 @@ import { Channel } from "../../types/Channel";
 import styles from "./controls.module.scss";
 import { VolumeSlider } from "../VolumeSlider";
 import { useStore } from "lib/store";
+import { useRouter } from "next/dist/client/router";
 
 interface Props {
   pause: () => void;
@@ -20,6 +21,9 @@ export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props)
   const prevId = useSSRSafeId();
   const nextId = useSSRSafeId();
   const playPauseId = useSSRSafeId();
+
+  const router = useRouter();
+  const isFullscreen = router.query.fullscreen === "true";
 
   const [isPlaying, channel, channels] = useStore((s) => [
     s.isPlaying,
@@ -72,41 +76,43 @@ export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props)
   }
 
   return (
-    <div className={styles.mediaControls}>
-      <button
-        disabled={!channel}
-        onClick={handlePrevChannel}
-        title="Play previous channel"
-        aria-label="Play previous channel"
-        className={styles.mediaControlBtn}
-        id={prevId}
-      >
-        <SkipBackwardIcon aria-labelledby={prevId} />
-      </button>
-      <button
-        disabled={!channel}
-        onClick={handlePlayPause}
-        title="Pause/Resume channel"
-        aria-label="Pause or resume the channel"
-        className={styles.mediaControlBtn}
-        id={playPauseId}
-      >
-        {isPlaying ? (
-          <PauseIcon aria-labelledby={playPauseId} />
-        ) : (
-          <PlayFillIcon aria-labelledby={playPauseId} />
-        )}
-      </button>
-      <button
-        disabled={!channel}
-        onClick={handleNextChannel}
-        title="Play next channel"
-        aria-label="Play next channel"
-        className={styles.mediaControlBtn}
-        id={nextId}
-      >
-        <SkipForwardIcon aria-labelledby={nextId} />
-      </button>
+    <div className={isFullscreen ? styles.fsMedialControls : styles.mediaControls}>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <button
+          disabled={!channel}
+          onClick={handlePrevChannel}
+          title="Play previous channel"
+          aria-label="Play previous channel"
+          className={styles.mediaControlBtn}
+          id={prevId}
+        >
+          <SkipBackwardIcon aria-labelledby={prevId} />
+        </button>
+        <button
+          disabled={!channel}
+          onClick={handlePlayPause}
+          title="Pause/Resume channel"
+          aria-label="Pause or resume the channel"
+          className={styles.mediaControlBtn}
+          id={playPauseId}
+        >
+          {isPlaying ? (
+            <PauseIcon aria-labelledby={playPauseId} />
+          ) : (
+            <PlayFillIcon aria-labelledby={playPauseId} />
+          )}
+        </button>
+        <button
+          disabled={!channel}
+          onClick={handleNextChannel}
+          title="Play next channel"
+          aria-label="Play next channel"
+          className={styles.mediaControlBtn}
+          id={nextId}
+        >
+          <SkipForwardIcon aria-labelledby={nextId} />
+        </button>
+      </div>
 
       <VolumeSlider channel={channel} setVolume={setVolume} />
     </div>

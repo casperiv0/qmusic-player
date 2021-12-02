@@ -124,6 +124,7 @@ export function useMusic({ channels, channel }: AppProps) {
 
     router.replace({
       query: {
+        ...router.query,
         channel: channel.data.id,
       },
     });

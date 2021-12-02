@@ -1,26 +1,26 @@
 import * as React from "react";
 import Head from "next/head";
-import { ChannelItem } from "components/ChannelItem";
-import { ChannelsGrid } from "components/ChannelsGrid";
 import { Loader } from "components/Loader";
-import { NowPlaying } from "components/NowPlaying";
-import { fetchChannels, useMusic } from "lib/useMusic";
-import { Footer } from "components/Footer/Footer";
-import { MediaControls } from "components/MediaControls";
+import { fetchChannels } from "lib/useMusic";
 import { useStore } from "lib/store";
 import { Error } from "components/Error/Error";
 import { SocketProvider } from "lib/socket";
 import { GetServerSideProps } from "next";
 import { Channel } from "types/Channel";
+import { useRouter } from "next/dist/client/router";
+import { FullscreenView } from "src/views/Fullscreen/Fullscreen";
+import { DefaultView } from "src/views/default/Default";
 
 export interface AppProps {
   channels: Channel[];
   channel: Channel | null;
 }
 
-export default function PlayerPage({ channels: data, channel }: AppProps) {
-  const music = useMusic({ channels: data, channel });
-  const [state, channels] = useStore((s) => [s.state, s.channels]);
+export default function PlayerPage({ channels, channel }: AppProps) {
+  const [state] = useStore((s) => [s.state]);
+
+  const router = useRouter();
+  const isFullscreen = router.query.fullscreen === "true";
 
   if (state === "loading") {
     return <Loader />;
@@ -35,19 +35,12 @@ export default function PlayerPage({ channels: data, channel }: AppProps) {
       <Head>
         <title>Q-Music Player</title>
       </Head>
-      <MediaControls
-        playNewChannel={music.playNewChannel}
-        pause={music.pause}
-        play={music.play}
-        setVolume={music.setVolume}
-      />
-      <NowPlaying />
-      <ChannelsGrid>
-        {channels.map((channel) => (
-          <ChannelItem key={channel.id} channel={channel} playNewChannel={music.playNewChannel} />
-        ))}
-      </ChannelsGrid>
-      <Footer />
+
+      {isFullscreen ? (
+        <FullscreenView channel={channel} channels={channels} />
+      ) : (
+        <DefaultView channel={channel} channels={channels} />
+      )}
 
       <SocketProvider />
     </>
