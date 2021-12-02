@@ -22,7 +22,7 @@ const ACTIONS = (station: string) => [
 
 export const SocketProvider = () => {
   const [connected, setConnected] = React.useState(false);
-  const { setUpNext, setCurrentProgram, setNowPlaying, currentChannel } = useStore();
+  const { setUpNext, setNowPlaying, currentChannel } = useStore();
   const router = useRouter();
 
   const channelId = String(router.query.channel);
@@ -32,11 +32,11 @@ export const SocketProvider = () => {
   }
 
   React.useEffect(() => {
-    if (currentChannel && connected) {
+    if (channelId && connected) {
       sendActions();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentChannel, connected]);
+  }, [currentChannel, channelId, connected]);
 
   React.useEffect(() => {
     const openHandler = () => {
@@ -68,15 +68,7 @@ export const SocketProvider = () => {
       const preData = JSON.parse(message.data);
       const data = JSON.parse(preData?.data ?? "{}");
 
-      if (data.station !== currentChannel?.data.station_id) return;
-
-      if (data.entity === "program") {
-        setCurrentProgram(null);
-
-        if (data.data && data.data.now_on_air_info) {
-          setCurrentProgram(data.data);
-        }
-      }
+      if (currentChannel && data.station !== currentChannel?.data.station_id) return;
 
       if (data.entity === "plays") {
         setNowPlaying(data.data);
@@ -94,7 +86,7 @@ export const SocketProvider = () => {
     return () => {
       client.removeEventListener("message", messageHandler);
     };
-  }, [currentChannel, channelId, setUpNext, setNowPlaying, setCurrentProgram]);
+  }, [currentChannel, channelId, setUpNext, setNowPlaying]);
 
   return null;
 };

@@ -131,6 +131,12 @@ export function useMusic({ channels, channel }: AppProps) {
     const success = await play();
 
     if (success) {
+      // this will show the channel icon instead. There is no live feedback about the current song.
+      const isQShutUpAndDance = channel.data.station_id === "qbe_dance";
+      if (isQShutUpAndDance) {
+        store.setNowPlaying(null);
+      }
+
       store.setCurrentChannel(channel);
     }
   }

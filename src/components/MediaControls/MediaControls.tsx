@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useSSRSafeId } from "@react-aria/ssr";
 import { PlayFillIcon } from "../../icons/PlayFill";
 import { SkipBackwardIcon } from "../../icons/SkipBackward";
 import { SkipForwardIcon } from "../../icons/SkipForward";
@@ -16,6 +17,10 @@ interface Props {
 }
 
 export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props) => {
+  const prevId = useSSRSafeId();
+  const nextId = useSSRSafeId();
+  const playPauseId = useSSRSafeId();
+
   const [isPlaying, channel, channels] = useStore((s) => [
     s.isPlaying,
     s.currentChannel,
@@ -74,8 +79,9 @@ export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props)
         title="Play previous channel"
         aria-label="Play previous channel"
         className={styles.mediaControlBtn}
+        id={prevId}
       >
-        <SkipBackwardIcon />
+        <SkipBackwardIcon aria-labelledby={prevId} />
       </button>
       <button
         disabled={!channel}
@@ -83,8 +89,13 @@ export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props)
         title="Pause/Resume channel"
         aria-label="Pause or resume the channel"
         className={styles.mediaControlBtn}
+        id={playPauseId}
       >
-        {isPlaying ? <PauseIcon /> : <PlayFillIcon />}
+        {isPlaying ? (
+          <PauseIcon aria-labelledby={playPauseId} />
+        ) : (
+          <PlayFillIcon aria-labelledby={playPauseId} />
+        )}
       </button>
       <button
         disabled={!channel}
@@ -92,8 +103,9 @@ export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props)
         title="Play next channel"
         aria-label="Play next channel"
         className={styles.mediaControlBtn}
+        id={nextId}
       >
-        <SkipForwardIcon />
+        <SkipForwardIcon aria-labelledby={nextId} />
       </button>
 
       <VolumeSlider channel={channel} setVolume={setVolume} />

@@ -10,13 +10,13 @@ interface Props {
 
 export const ChannelItem = ({ channel, playNewChannel }: Props) => {
   return (
-    <div
+    <button
       title="Click to play channel"
       onClick={() => playNewChannel(channel)}
       className={styles.channelItem}
     >
       <div className={styles.playIcon}>
-        <PlayIcon />
+        <PlayIcon aria-label={`Start playing ${channel.data.name}`} />
       </div>
 
       <Image
@@ -25,9 +25,10 @@ export const ChannelItem = ({ channel, playNewChannel }: Props) => {
         height="160px"
         width="160px"
         draggable={false}
+        tabIndex={0}
       />
 
       <p>{channel.data.name}</p>
-    </div>
+    </button>
   );
 };
