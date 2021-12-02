@@ -1,7 +1,7 @@
 .channelsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .channelItem {
@@ -12,11 +12,13 @@
   position: relative;
   border: none;
   background: none;
+  text-align: center;
 
   p {
-    margin-top: 0.5rem;
+    margin-top: 0.2rem;
     font-size: 1rem;
     color: #d1d1d1;
+    transition: margin 200ms cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
   img {
@@ -26,8 +28,18 @@
     position: relative;
   }
 
-  &:hover p {
-    text-decoration: underline;
+  > span {
+    transition: transform 200ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  &:hover {
+    p {
+      margin-top: 0.55rem;
+    }
+
+    & > span {
+      transform: scale(1.03);
+    }
   }
 
   &:hover .playIcon {

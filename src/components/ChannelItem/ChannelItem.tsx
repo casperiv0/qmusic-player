@@ -16,7 +16,7 @@ export const ChannelItem = ({ channel, playNewChannel }: Props) => {
       className={styles.channelItem}
     >
       <div className={styles.playIcon}>
-        <PlayIcon aria-label={`Start playing ${channel.data.name}`} />
+        <PlayIcon fill="#fff" aria-label={`Start playing ${channel.data.name}`} />
       </div>
 
       <Image
