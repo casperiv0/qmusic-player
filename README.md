@@ -1,3 +1,7 @@
 # qmusic-player
 
-Custom player for [QMusic](https://qmusic.be) (WIP)
+Custom player for [QMusic](https://qmusic.be)
+
+## Screenshot
+
+![app](./public/app.png)
