@@ -136,6 +136,7 @@ export function useMusic({ channels, channel }: AppProps) {
       const isQShutUpAndDance = channel.data.station_id === "qbe_dance";
       if (isQShutUpAndDance) {
         store.setNowPlaying(null);
+        store.setUpNext(null);
       }
 
       store.setCurrentChannel(channel);
