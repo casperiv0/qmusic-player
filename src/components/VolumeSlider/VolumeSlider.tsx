@@ -1,7 +1,7 @@
 import * as React from "react";
 import { getLocalVolume, setLocalVolume } from "lib/volume";
 import { Channel } from "types/Channel";
-import styles from "./volume.module.scss";
+import { Slider } from "./Slider";
 
 interface Props {
   channel: Channel | null;
@@ -17,8 +17,8 @@ export const VolumeSlider = ({ channel, setVolume }: Props) => {
     setVolume(vol / 100);
   }, [setVolume]);
 
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.currentTarget.valueAsNumber;
+  function onChange(arr: number[]) {
+    const [value] = arr as [number];
     const newVol = value / 100;
 
     setVol(value);
@@ -40,14 +40,8 @@ export const VolumeSlider = ({ channel, setVolume }: Props) => {
           `}
         </style>
       ) : null}
-      <input
-        disabled={!channel}
-        title={`Volume: ${vol}%`}
-        type="range"
-        value={vol}
-        onChange={onChange}
-        className={styles.volumeSlider}
-      />
+
+      <Slider label="Volume" onChange={onChange} minValue={0} maxValue={100} value={[vol]} />
     </>
   );
 };
