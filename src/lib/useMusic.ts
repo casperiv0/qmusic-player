@@ -165,7 +165,7 @@ export function useMusic({ channels, channel }: AppProps) {
 
 export async function fetchChannels() {
   try {
-    const { data } = await axios.get<any>(API_URL);
+    const { data } = await axios.get(API_URL);
 
     const channels = data.data as Channel[];
 

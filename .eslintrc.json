@@ -9,5 +9,8 @@
     "@casper124578/eslint-config-react",
     "@casper124578/eslint-config-next"
   ],
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
 }
