@@ -4,6 +4,7 @@ import { Channel, ChannelStream } from "../types/Channel";
 import { useRouter } from "next/dist/client/router";
 import { useStore } from "./store";
 import { AppProps } from "src/pages";
+import { useMounted } from "@casper124578/useful";
 
 const API_URL = "https://api.qmusic.be/2.4/app/channels";
 
@@ -12,6 +13,7 @@ function makeNowPlayingUrl(apiUrl: string) {
 }
 
 export function useMusic({ channels, channel }: AppProps) {
+  const isMounted = useMounted();
   const router = useRouter();
   const _element = React.useRef<HTMLAudioElement>(null);
 
@@ -60,8 +62,9 @@ export function useMusic({ channels, channel }: AppProps) {
       store.setNowPlayingUrl(makeNowPlayingUrl(channel.data.api_url));
 
       const [stream] = channel.data.streams.mp3;
-
-      setStreamToEl(stream!);
+      if (stream && isMounted) {
+        setStreamToEl(stream);
+      }
     } catch (e) {
       store.setNowPlaying(null);
       store.setCurrentChannel(null);
@@ -140,6 +143,8 @@ export function useMusic({ channels, channel }: AppProps) {
   }
 
   function setVolume(volume: number) {
+    if (!isMounted) return;
+
     if (!_element.current) {
       return console.error("There was no element");
     }
