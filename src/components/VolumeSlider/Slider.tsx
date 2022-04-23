@@ -10,10 +10,10 @@ interface Props {
   value?: [number];
   minValue?: number;
   maxValue?: number;
-  onChange?: (value: number[]) => void;
+  onChange?(value: number[]): void;
 }
 
-export const Slider = (props: Props) => {
+export function Slider(props: Props) {
   const trackRef = React.useRef<HTMLDivElement>(null);
   const numberFormatter = useNumberFormatter();
   const state = useSliderState({ ...props, numberFormatter });
@@ -27,7 +27,7 @@ export const Slider = (props: Props) => {
       </div>
     </div>
   );
-};
+}
 
 interface ThumbProps {
   trackRef: React.RefObject<HTMLDivElement>;

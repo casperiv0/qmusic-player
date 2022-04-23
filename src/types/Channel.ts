@@ -27,7 +27,7 @@ export type IChannelStreams =
 
 export interface ChannelStream {
   source: string;
-  extra: unknown | null;
+  extra: unknown;
 }
 
 export interface ChannelLogo {

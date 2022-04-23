@@ -5,10 +5,10 @@ import { PlayIcon } from "./PlayIcon";
 
 interface Props {
   channel: Channel;
-  playNewChannel: (channel: Channel) => void;
+  playNewChannel(channel: Channel): void;
 }
 
-export const ChannelItem = ({ channel, playNewChannel }: Props) => {
+export function ChannelItem({ channel, playNewChannel }: Props) {
   return (
     <button
       title="Click to play channel"
@@ -31,4 +31,4 @@ export const ChannelItem = ({ channel, playNewChannel }: Props) => {
       <p>{channel.data.name}</p>
     </button>
   );
-};
+}

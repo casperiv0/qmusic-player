@@ -5,10 +5,10 @@ import { Slider } from "./Slider";
 
 interface Props {
   channel: Channel | null;
-  setVolume: (volume: number) => void;
+  setVolume(volume: number): void;
 }
 
-export const VolumeSlider = ({ channel, setVolume }: Props) => {
+export function VolumeSlider({ channel, setVolume }: Props) {
   const [vol, setVol] = React.useState(0);
 
   React.useEffect(() => {
@@ -32,10 +32,10 @@ export const VolumeSlider = ({ channel, setVolume }: Props) => {
         <style jsx>
           {`
             ::-webkit-slider-thumb {
-              background: ${channel?.color?.background} !important;
+              background: ${channel.color.background} !important;
             }
             ::-moz-range-thumb {
-              background: ${channel?.color?.background} !important;
+              background: ${channel.color.background} !important;
             }
           `}
         </style>
@@ -44,4 +44,4 @@ export const VolumeSlider = ({ channel, setVolume }: Props) => {
       <Slider label="Volume" onChange={onChange} minValue={0} maxValue={100} value={[vol]} />
     </>
   );
-};
+}

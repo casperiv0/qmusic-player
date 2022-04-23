@@ -1,9 +1,8 @@
 import { AppProps } from "next/app";
 import { SSRProvider } from "@react-aria/ssr";
-import { NextPage } from "next";
 import "../styles/global.scss";
 
-const App: NextPage<AppProps> = ({ Component, pageProps }) => {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className="container">
       <div className="content">
@@ -13,6 +12,4 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
       </div>
     </div>
   );
-};
-
-export default App;
+}

@@ -20,7 +20,7 @@ const ACTIONS = (station: string) => [
   },
 ];
 
-export const SocketProvider = () => {
+export function SocketProvider() {
   const [connected, setConnected] = React.useState(false);
   const { setUpNext, setNowPlaying, currentChannel } = useStore();
   const router = useRouter();
@@ -41,11 +41,12 @@ export const SocketProvider = () => {
   React.useEffect(() => {
     const openHandler = () => {
       setConnected(true);
-      console.log("CONNECTED");
+      console.info("[socket]: CONNECTED");
       sendActions();
     };
 
     const errorHandler = () => {
+      console.info("[socket]: DISCONNECTED");
       setConnected(false);
     };
 
@@ -68,7 +69,7 @@ export const SocketProvider = () => {
       const preData = JSON.parse(message.data);
       const data = JSON.parse(preData?.data ?? "{}");
 
-      if (currentChannel && data.station !== currentChannel?.data.station_id) return;
+      if (currentChannel && data.station !== currentChannel.data.station_id) return;
 
       if (data.entity === "plays") {
         setNowPlaying(data.data);
@@ -89,4 +90,4 @@ export const SocketProvider = () => {
   }, [currentChannel, channelId, setUpNext, setNowPlaying]);
 
   return null;
-};
+}

@@ -7,8 +7,6 @@ import { Error } from "components/Error/Error";
 import { SocketProvider } from "lib/socket";
 import { GetServerSideProps } from "next";
 import { Channel } from "types/Channel";
-import { useRouter } from "next/dist/client/router";
-import { FullscreenView } from "src/views/Fullscreen/Fullscreen";
 import { DefaultView } from "src/views/default/Default";
 
 export interface AppProps {
@@ -18,9 +16,6 @@ export interface AppProps {
 
 export default function PlayerPage({ channels, channel }: AppProps) {
   const [state] = useStore((s) => [s.state]);
-
-  const router = useRouter();
-  const isFullscreen = router.query.fullscreen === "true";
 
   if (state === "loading") {
     return <Loader />;
@@ -36,11 +31,7 @@ export default function PlayerPage({ channels, channel }: AppProps) {
         <title>Q-Music Player</title>
       </Head>
 
-      {isFullscreen ? (
-        <FullscreenView channel={channel} channels={channels} />
-      ) : (
-        <DefaultView channel={channel} channels={channels} />
-      )}
+      <DefaultView channel={channel} channels={channels} />
 
       <SocketProvider />
     </>
@@ -48,7 +39,7 @@ export default function PlayerPage({ channels, channel }: AppProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { channels } = await fetchChannels();
+  const channels = await fetchChannels();
 
   return {
     props: {

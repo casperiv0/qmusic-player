@@ -3,7 +3,7 @@ import Head from "next/head";
 import styles from "./np.module.scss";
 import { useStore } from "lib/store";
 
-export const NowPlaying = () => {
+export function NowPlaying() {
   const [isPlaying, nowPlaying, upNext, currentChannel] = useStore((s) => [
     s.isPlaying,
     s.nowPlaying,
@@ -79,4 +79,4 @@ export const NowPlaying = () => {
       </div>
     </>
   );
-};
+}

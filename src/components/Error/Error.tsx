@@ -1,6 +1,6 @@
 import styles from "./error.module.scss";
 
-export const Error = () => {
+export function Error() {
   return (
     <div className={styles.errorContainer}>
       <div>
@@ -9,4 +9,4 @@ export const Error = () => {
       </div>
     </div>
   );
-};
+}

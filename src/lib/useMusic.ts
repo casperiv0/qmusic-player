@@ -38,11 +38,7 @@ export function useMusic({ channels, channel }: AppProps) {
   }, []);
 
   async function init() {
-    if (channels) {
-      store.setChannels(channels);
-    } else {
-      await fetchChannelsData();
-    }
+    await fetchChannelsData(channels);
 
     if (channel) {
       store.setCurrentChannel(channel);
@@ -51,9 +47,9 @@ export function useMusic({ channels, channel }: AppProps) {
     createElement();
   }
 
-  async function fetchChannelsData() {
+  async function fetchChannelsData(_channels?: Channel[]) {
     try {
-      const { channels } = await fetchChannels();
+      const channels = _channels ?? (await fetchChannels());
       store.setChannels(channels);
 
       const [channel] = channels;
@@ -169,8 +165,8 @@ export async function fetchChannels() {
 
     const channels = data.data as Channel[];
 
-    return { channels };
+    return channels;
   } catch (e) {
-    return { channels: [] };
+    return [];
   }
 }

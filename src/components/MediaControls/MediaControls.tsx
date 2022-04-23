@@ -1,29 +1,25 @@
 import * as React from "react";
 import { useSSRSafeId } from "@react-aria/ssr";
-import { PlayFillIcon } from "../../icons/PlayFill";
-import { SkipBackwardIcon } from "../../icons/SkipBackward";
-import { SkipForwardIcon } from "../../icons/SkipForward";
-import { PauseIcon } from "../../icons/PauseIcon";
-import { Channel } from "../../types/Channel";
+import { PlayFillIcon } from "icons/PlayFill";
+import { SkipBackwardIcon } from "icons/SkipBackward";
+import { SkipForwardIcon } from "icons/SkipForward";
+import { PauseIcon } from "icons/PauseIcon";
+import { Channel } from "types/Channel";
 import styles from "./controls.module.scss";
 import { VolumeSlider } from "../VolumeSlider";
 import { useStore } from "lib/store";
-import { useRouter } from "next/dist/client/router";
 
 interface Props {
-  pause: () => void;
-  play: () => void;
-  playNewChannel: (channel: Channel) => void;
-  setVolume: (vol: number) => void;
+  pause(): void;
+  play(): void;
+  playNewChannel(channel: Channel): void;
+  setVolume(vol: number): void;
 }
 
-export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props) => {
+export function MediaControls({ play, pause, playNewChannel, setVolume }: Props) {
   const prevId = useSSRSafeId();
   const nextId = useSSRSafeId();
   const playPauseId = useSSRSafeId();
-
-  const router = useRouter();
-  const isFullscreen = router.query.fullscreen === "true";
 
   const [isPlaying, channel, channels] = useStore((s) => [
     s.isPlaying,
@@ -76,7 +72,7 @@ export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props)
   }
 
   return (
-    <div className={isFullscreen ? styles.fsMedialControls : styles.mediaControls}>
+    <div className={styles.mediaControls}>
       <div style={{ display: "flex", alignItems: "center" }}>
         <button
           disabled={!channel}
@@ -117,4 +113,4 @@ export const MediaControls = ({ play, pause, playNewChannel, setVolume }: Props)
       <VolumeSlider channel={channel} setVolume={setVolume} />
     </div>
   );
-};
+}

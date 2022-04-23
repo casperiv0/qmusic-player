@@ -7,7 +7,7 @@ import { MediaControls } from "components/MediaControls";
 import { useStore } from "lib/store";
 import { AppProps } from "src/pages";
 
-export const DefaultView = ({ channels: data, channel }: AppProps) => {
+export function DefaultView({ channels: data, channel }: AppProps) {
   const music = useMusic({ channels: data, channel });
   const [channels] = useStore((s) => [s.channels]);
 
@@ -28,4 +28,4 @@ export const DefaultView = ({ channels: data, channel }: AppProps) => {
       <Footer />
     </>
   );
-};
+}

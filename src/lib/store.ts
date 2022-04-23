@@ -6,25 +6,25 @@ export type PlayStates = "idle" | "loading" | "error";
 
 interface Store {
   state: PlayStates;
-  setState: (state: PlayStates) => void;
+  setState(state: PlayStates): void;
 
   isPlaying: boolean;
-  setIsPlaying: (v: boolean) => void;
+  setIsPlaying(v: boolean): void;
 
   currentChannel: Channel | null;
-  setCurrentChannel: (channel: Channel | null) => void;
+  setCurrentChannel(channel: Channel | null): void;
 
   nowPlaying: Track | null;
-  setNowPlaying: (track: Track | null) => void;
+  setNowPlaying(track: Track | null): void;
 
   nowPlayingUrl: string | null;
-  setNowPlayingUrl: (url: string | null) => void;
+  setNowPlayingUrl(url: string | null): void;
 
   upNext: Track | null;
-  setUpNext: (track: Track | null) => void;
+  setUpNext(track: Track | null): void;
 
   channels: Channel[];
-  setChannels: (channels: Channel[]) => void;
+  setChannels(channels: Channel[]): void;
 }
 
 export const useStore = create<Store>((set) => ({
