@@ -2,6 +2,7 @@ import Image from "next/image";
 import Head from "next/head";
 import styles from "./np.module.scss";
 import { useStore } from "lib/store";
+import { Track } from "types/Track";
 
 export function NowPlaying() {
   const [isPlaying, nowPlaying, upNext, currentChannel] = useStore((s) => [
@@ -19,18 +20,14 @@ export function NowPlaying() {
     );
   }
 
-  const npThumbnail = nowPlaying?.thumbnail
+  const thumbnail = nowPlaying?.thumbnail
     ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${nowPlaying.thumbnail}`
-    : currentChannel.data.logo.app_square;
-
-  const upNextThumbnail = upNext?.thumbnail
-    ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${upNext.thumbnail}`
     : currentChannel.data.logo.app_square;
 
   return (
     <>
       <Head>
-        <link rel="shortcut icon" href={npThumbnail} type="image/x-icon" />
+        <link rel="shortcut icon" href={thumbnail} type="image/x-icon" />
         <title>
           {isPlaying ? "Playing" : "Paused. "} {nowPlaying ? nowPlaying.title : null} -{" "}
           {currentChannel.data.name}
@@ -40,43 +37,46 @@ export function NowPlaying() {
       <div className={styles.container}>
         <div className={styles.nowPlaying}>
           <h1>Now playing</h1>
-          <header className={styles.header}>
-            <Image
-              src={npThumbnail}
-              alt={nowPlaying?.title ?? currentChannel.data.name}
-              draggable={false}
-              objectFit="cover"
-              height="85px"
-              width="85px"
-            />
-            <div className={styles.titleArea}>
-              <h1>{nowPlaying?.title ?? currentChannel.data.name}</h1>
-              <h2>{nowPlaying?.artist.name}</h2>
-              <h2>{currentChannel.data.name}</h2>
-            </div>
-          </header>
+          <PlayingCard track={nowPlaying} />
         </div>
         {upNext && (
           <div className={styles.nowPlaying}>
             <h1>Up next</h1>
-            <header className={styles.header}>
-              <Image
-                src={upNextThumbnail}
-                alt={upNext.title}
-                draggable={false}
-                objectFit="cover"
-                height="80px"
-                width="80px"
-              />
-              <div className={styles.titleArea}>
-                <h1>{upNext.title}</h1>
-                <h2>{upNext.artist.name}</h2>
-                <h2>{currentChannel.data.name}</h2>
-              </div>
-            </header>
+            <PlayingCard track={upNext} />
           </div>
         )}
       </div>
     </>
+  );
+}
+
+function PlayingCard({ track }: { track: Track | null }) {
+  const [currentChannel] = useStore((s) => [s.currentChannel]);
+
+  const thumbnail = track?.thumbnail
+    ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${track.thumbnail}`
+    : currentChannel?.data.logo.app_square;
+
+  if (!thumbnail) {
+    return null;
+  }
+
+  return (
+    <header className={styles.header}>
+      <Image
+        src={thumbnail}
+        alt={track?.title ?? currentChannel?.data.name}
+        draggable={false}
+        objectFit="cover"
+        height="85px"
+        width="85px"
+      />
+      <div className={styles.titleArea}>
+        <h1>{track?.title ?? currentChannel?.data.name}</h1>
+        <p>{track?.artist.name}</p>
+        <p>{track?.release_year}</p>
+        <p>{currentChannel?.data.name}</p>
+      </div>
+    </header>
   );
 }

@@ -38,7 +38,7 @@
     font-size: 1.2rem;
   }
 
-  h2 {
+  p {
     font-size: 0.9rem;
     color: #dddddd;
     font-weight: 500;
@@ -46,36 +46,5 @@
 
   input {
     margin-top: 0.9rem;
-  }
-}
-
-.fsContainer {
-  min-height: calc(100vh - 10rem);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fsNowPlaying {
-  & img {
-    border-radius: 0.5rem;
-  }
-}
-
-.fsTitleArea {
-  margin-top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-
-  h1 {
-    color: #ffffff;
-    font-size: 2.5rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-    color: #dddddd;
-    font-weight: 400;
   }
 }
