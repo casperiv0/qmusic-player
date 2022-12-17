@@ -1,6 +1,6 @@
 import SockJS from "sockjs-client";
 import * as React from "react";
-import { useStore } from "./store";
+import { shallow, useStore } from "./store";
 import { useRouter } from "next/dist/client/router";
 
 const client = new SockJS("https://socket.qmusic.be/api");
@@ -22,7 +22,14 @@ const ACTIONS = (station: string) => [
 
 export function SocketProvider() {
   const [connected, setConnected] = React.useState(false);
-  const { setUpNext, setNowPlaying, currentChannel } = useStore();
+  const { setUpNext, setNowPlaying, currentChannel } = useStore(
+    (state) => ({
+      setUpNext: state.setUpNext,
+      setNowPlaying: state.setNowPlaying,
+      currentChannel: state.currentChannel,
+    }),
+    shallow,
+  );
   const router = useRouter();
 
   const channelId = String(router.query.channel);

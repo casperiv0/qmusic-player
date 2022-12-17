@@ -49,3 +49,5 @@ export const useStore = create<Store>((set) => ({
   channels: [],
   setChannels: (channels) => set({ channels }),
 }));
+
+export { default as shallow } from "zustand/shallow";

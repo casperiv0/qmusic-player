@@ -7,7 +7,7 @@ import { PauseIcon } from "icons/PauseIcon";
 import { Channel } from "types/Channel";
 import styles from "./controls.module.scss";
 import { VolumeSlider } from "../VolumeSlider";
-import { useStore } from "lib/store";
+import { shallow, useStore } from "lib/store";
 
 interface Props {
   pause(): void;
@@ -21,11 +21,14 @@ export function MediaControls({ play, pause, playNewChannel, setVolume }: Props)
   const nextId = useSSRSafeId();
   const playPauseId = useSSRSafeId();
 
-  const [isPlaying, channel, channels] = useStore((s) => [
-    s.isPlaying,
-    s.currentChannel,
-    s.channels,
-  ]);
+  const { isPlaying, currentChannel, channels } = useStore(
+    (state) => ({
+      isPlaying: state.isPlaying,
+      currentChannel: state.currentChannel,
+      channels: state.channels,
+    }),
+    shallow,
+  );
 
   React.useEffect(() => {
     if (!("mediaSession" in navigator)) return;
@@ -44,9 +47,9 @@ export function MediaControls({ play, pause, playNewChannel, setVolume }: Props)
   });
 
   function handleNextChannel() {
-    if (!channel) return; // nothing is playing.
+    if (!currentChannel) return; // nothing is playing.
 
-    const idxOfCurrentChannel = channels.indexOf(channel);
+    const idxOfCurrentChannel = channels.indexOf(currentChannel);
 
     const newIndex = idxOfCurrentChannel === channels.length - 1 ? 0 : idxOfCurrentChannel + 1;
 
@@ -54,9 +57,9 @@ export function MediaControls({ play, pause, playNewChannel, setVolume }: Props)
   }
 
   function handlePrevChannel() {
-    if (!channel) return; // nothing is playing.
+    if (!currentChannel) return; // nothing is playing.
 
-    const idxOfCurrentChannel = channels.indexOf(channel);
+    const idxOfCurrentChannel = channels.indexOf(currentChannel);
 
     const newIndex = idxOfCurrentChannel === 0 ? channels.length - 1 : idxOfCurrentChannel - 1;
 
@@ -75,7 +78,7 @@ export function MediaControls({ play, pause, playNewChannel, setVolume }: Props)
     <div className={styles.mediaControls}>
       <div style={{ display: "flex", alignItems: "center" }}>
         <button
-          disabled={!channel}
+          disabled={!currentChannel}
           onClick={handlePrevChannel}
           title="Play previous channel"
           aria-label="Play previous channel"
@@ -85,7 +88,7 @@ export function MediaControls({ play, pause, playNewChannel, setVolume }: Props)
           <SkipBackwardIcon aria-labelledby={prevId} />
         </button>
         <button
-          disabled={!channel}
+          disabled={!currentChannel}
           onClick={handlePlayPause}
           title="Pause/Resume channel"
           aria-label="Pause or resume the channel"
@@ -99,7 +102,7 @@ export function MediaControls({ play, pause, playNewChannel, setVolume }: Props)
           )}
         </button>
         <button
-          disabled={!channel}
+          disabled={!currentChannel}
           onClick={handleNextChannel}
           title="Play next channel"
           aria-label="Play next channel"
@@ -110,7 +113,7 @@ export function MediaControls({ play, pause, playNewChannel, setVolume }: Props)
         </button>
       </div>
 
-      <VolumeSlider channel={channel} setVolume={setVolume} />
+      <VolumeSlider setVolume={setVolume} />
     </div>
   );
 }

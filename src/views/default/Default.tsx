@@ -9,7 +9,7 @@ import { AppProps } from "src/pages";
 
 export function DefaultView({ channels: data, channel }: AppProps) {
   const music = useMusic({ channels: data, channel });
-  const [channels] = useStore((s) => [s.channels]);
+  const channels = useStore((state) => state.channels);
 
   return (
     <>

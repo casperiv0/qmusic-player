@@ -22,10 +22,11 @@ export function ChannelItem({ channel, playNewChannel }: Props) {
       <Image
         src={channel.data.logo.app_square}
         alt={channel.data.name}
-        height="160px"
-        width="160px"
+        height={160}
+        width={160}
         draggable={false}
         tabIndex={0}
+        style={{ width: 160, height: 160 }}
       />
 
       <p>{channel.data.name}</p>

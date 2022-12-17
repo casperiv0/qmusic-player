@@ -1,16 +1,19 @@
 import Image from "next/image";
 import Head from "next/head";
 import styles from "./np.module.scss";
-import { useStore } from "lib/store";
+import { shallow, useStore } from "lib/store";
 import { Track } from "types/Track";
 
 export function NowPlaying() {
-  const [isPlaying, nowPlaying, upNext, currentChannel] = useStore((s) => [
-    s.isPlaying,
-    s.nowPlaying,
-    s.upNext,
-    s.currentChannel,
-  ]);
+  const { isPlaying, currentChannel, nowPlaying, upNext } = useStore(
+    (state) => ({
+      isPlaying: state.isPlaying,
+      currentChannel: state.currentChannel,
+      nowPlaying: state.nowPlaying,
+      upNext: state.upNext,
+    }),
+    shallow,
+  );
 
   if ((!nowPlaying && !currentChannel) || !currentChannel) {
     return (
@@ -51,7 +54,7 @@ export function NowPlaying() {
 }
 
 function PlayingCard({ track }: { track: Track | null }) {
-  const [currentChannel] = useStore((s) => [s.currentChannel]);
+  const currentChannel = useStore((state) => state.currentChannel);
 
   const thumbnail = track?.thumbnail
     ? `https://static1.qmusic.medialaancdn.be/web_list/itemlist_small_desktop/${track.thumbnail}`
@@ -65,11 +68,11 @@ function PlayingCard({ track }: { track: Track | null }) {
     <header className={styles.header}>
       <Image
         src={thumbnail}
-        alt={track?.title ?? currentChannel?.data.name}
+        alt={track?.title ?? currentChannel?.data.name ?? "No title"}
         draggable={false}
-        objectFit="cover"
-        height="85px"
-        width="85px"
+        height={85}
+        width={85}
+        style={{ objectFit: "cover" }}
       />
       <div className={styles.titleArea}>
         <h1>{track?.title ?? currentChannel?.data.name}</h1>

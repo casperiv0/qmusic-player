@@ -1,4 +1,3 @@
-import * as React from "react";
 import Head from "next/head";
 import { Loader } from "components/Loader";
 import { fetchChannels } from "lib/useMusic";
@@ -15,7 +14,7 @@ export interface AppProps {
 }
 
 export default function PlayerPage({ channels, channel }: AppProps) {
-  const [state] = useStore((s) => [s.state]);
+  const state = useStore((state) => state.state);
 
   if (state === "loading") {
     return <Loader />;
@@ -42,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const channels = await fetchChannels();
 
   return {
+    revalidate: 60,
     props: {
       channels,
       channel: channels.find((v) => v.data.station_id === String(query.channel)) ?? null,
