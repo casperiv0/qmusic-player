@@ -1,4 +1,4 @@
-import {create} from "zustand";
+import { create } from "zustand";
 import { Channel } from "types/Channel";
 import { Track } from "types/Track";
 
@@ -50,4 +50,4 @@ export const useStore = create<Store>((set) => ({
   setChannels: (channels) => set({ channels }),
 }));
 
-export { default as shallow } from "zustand/shallow";
+export { shallow } from "zustand/shallow";
