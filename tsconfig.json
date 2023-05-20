@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -28,13 +28,15 @@
     "noUncheckedIndexedAccess": true /* Include 'undefined' in index signature results */,
     "baseUrl": ".",
     "paths": {
+      "~/*": ["./src/*"],
       "lib/*": ["./src/lib/*"],
       "types/*": ["./src/types/*"],
       "components/*": ["./src/components/*"],
       "icons/*": ["./src/icons/*"]
     },
-    "incremental": true
+    "incremental": true,
+    "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

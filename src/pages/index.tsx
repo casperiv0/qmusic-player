@@ -41,7 +41,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const channels = await fetchChannels();
 
   return {
-    revalidate: 60,
     props: {
       channels,
       channel: channels.find((v) => v.data.station_id === String(query.channel)) ?? null,
